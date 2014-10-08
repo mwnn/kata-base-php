@@ -1,27 +1,13 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: zoltan.budai
- * Date: 2014.09.29.
- * Time: 23:16
- */
 
-use Kata\H03Supermarket\Product;
-use Kata\H03Supermarket\Product\Apple;
-use Kata\H03Supermarket\Product\Light;
-use Kata\H03Supermarket\Product\Starship;
+use Kata\H03Supermarket\Concrete\CartProduct;
 
 class ProductTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @param $name
-     * @param $price
-     * @param $unit
-     * @param $product
-     *
      * @dataProvider dataForTestCreateProduct
      */
-    public function testCreateProduct($name, $price, $unit, $product)
+    public function testCreateProduct($name, $price, $unit, CartProduct $product)
     {
         $this->assertEquals($name,  $product->getName());
         $this->assertEquals($price, $product->getPrice());
@@ -31,25 +17,11 @@ class ProductTest extends PHPUnit_Framework_TestCase
     public function dataForTestCreateProduct()
     {
         return array(
-            array('Apple',    '32',   'kg',    new Apple(32, 1)),
-            array('Light',    '15',   'year',  new Light(15, 1)),
-            array('Starship', 999.99, 'piece', new Starship(999.99, 1)),
+            array('Apple',    '10',   't',     new CartProduct('Apple', 10, 't')),
+            array('Light',    '15',   'year',  new CartProduct('Light', 15, 'year')),
+            array('Light',    '30',   'year',  new CartProduct('Light', 30, 'year')),
+            array('Starship', 999.99, 'piece', new CartProduct('Starship', 999.99, 'piece')),
+            array('Starship', 102.99, 'piece', new CartProduct('Starship', 102.99, 'piece')),
         );
     }
-
-    /**
-     *
-     */
-    public function testAddQuantity()
-    {
-        $apple = new Apple(12, 2);
-
-        $this->assertEquals(2, $apple->getQuantity());
-
-        $apple->addQuantity(5);
-
-        $this->assertEquals(7, $apple->getQuantity());
-
-    }
-
 }

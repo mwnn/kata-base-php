@@ -1,14 +1,8 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: zoltan.budai
- * Date: 2014.09.29.
- * Time: 21:40
- */
 
 namespace Kata\H03Supermarket\Product;
 
-use Kata\H03Supermarket\Product\Product;
+use Kata\H03Supermarket\Concrete\CartProduct;
 
 class ProductFactory
 {
@@ -17,54 +11,28 @@ class ProductFactory
     const PRODUCT_STARSHIP = 'Starship';
 
     private $list = array(
-        self::PRODUCT_APPLE    => 32,
-        self::PRODUCT_LIGHT    => 15,
-        self::PRODUCT_STARSHIP => 999.99,
+        self::PRODUCT_APPLE    => array('price' => 32,     'unit' => 'kg'),
+        self::PRODUCT_LIGHT    => array('price' => 15,     'unit' => 'year'),
+        self::PRODUCT_STARSHIP => array('price' => 999.99, 'unit' => 'piece'),
     );
 
     /**
-     * @param $name
-     * @param $quantity
-     * @param int $price
+     * @name string $name
      *
-     * @return ProductInterface
+     * @return CartProduct
+     * @throws \InvalidArgumentException
      */
-    public function getProduct($name, $quantity, $discountPrice=0)
+    public function getProduct($name)
     {
         if (false === array_key_exists($name, $this->list))
         {
-            // TODO: implement
-            throw new Exception('');
-
+            throw new \InvalidArgumentException('Unknown product name.');
         }
 
-        if ((int)$quantity <= 0)
-        {
-            // TODO: implement
-            throw new Exception('');
-        }
+        $price   = $this->list[$name]['price'];
+        $unit    = $this->list[$name]['unit'];
 
-        $price = $this->list[$name];
-
-        if ((int)$discountPrice > 0)
-        {
-            $price = $discountPrice;
-        }
-
-        switch($name)
-        {
-            case self::PRODUCT_APPLE:
-                $product = new Apple($price, $quantity);
-                break;
-
-            case self::PRODUCT_LIGHT:
-                $product = new Light($price, $quantity);
-                break;
-
-            case self::PRODUCT_STARSHIP:
-                $product = new Starship($price, $quantity);
-                break;
-        }
+        $product = new CartProduct($name, $price, $unit);
 
         return $product;
     }

@@ -1,22 +1,31 @@
 <?php
 
 use Kata\H03Supermarket\Product\ProductFactory;
-use Kata\H03Supermarket\Product\Apple;
-use Kata\H03Supermarket\Product\Light;
-use Kata\H03Supermarket\Product\Starship;
 
 class ProductFactoryTest extends PHPUnit_Framework_TestCase
 {
+    /**
+     * @var ProductFactory
+     */
+    private $factory;
+
+    public function setUp()
+    {
+        $this->factory = new ProductFactory();
+    }
+
     /**
      * @dataProvider dataForFactoryTest
      */
     public function testFactory($productClass)
     {
-        $factory = new ProductFactory();
+        /**
+         * @var CartProduct
+         */
+        $product = $this->factory->getProduct($productClass);
 
-        $product = $factory->getProduct($productClass, 1, 1);
-
-        $this->assertInstanceOf("Kata\\H03Supermarket\\Product\\$productClass", $product);
+        $this->assertInstanceOf("Kata\\H03Supermarket\\Concrete\\CartProduct", $product);
+        $this->assertEquals($productClass, $product->getName());
     }
 
     public function dataForFactoryTest()
@@ -28,4 +37,11 @@ class ProductFactoryTest extends PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testThrowException()
+    {
+        $this->factory->getProduct('NonExistentProduct');
+    }
 }

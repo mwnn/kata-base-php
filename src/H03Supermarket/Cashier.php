@@ -1,10 +1,5 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: zoltan.budai
- * Date: 2014.09.29.
- * Time: 19:49
-
     We are supermarket sellers and we don't have a smart cashier to use, so we have to create one. (smile)
     We have 3 products to sell with the prices shown below:
 
@@ -35,42 +30,37 @@
 
 namespace Kata\H03Supermarket;
 
-use Kata\H03Supermarket\Basket;
-use Kata\H03Supermarket\Product\ProductInterface;
+//use Kata\H03Supermarket\DiscountFactory;
 
 class Cashier
 {
     private $totalPrice = 0;
 
-    /**
-     * @var ProductInterface
-     */
-    private $products = array();
+//    /**
+//     * @var DiscountFactory
+//     */
+//    private $discountFactory;
 
-    /**
-     * @var DiscountFactory
-     */
-    private $discountFactory;
-
-    public function __construct(DiscountFactory $discountFactory)
+    public function __construct(/*$discountfactory*/)
     {
-        $this->discountFactory = $discountFactory;
+//        $this->discountFactory = $discountFactory;
     }
 
-    public function processNextBasket(Basket $basket)
+    public function processNextCart(Cart $cart)
     {
         $this->totalPrice = 0;
-        $products = $basket->getProducts();
+        $items = $cart->getItems();
 
-        foreach ($products as $product)
+        foreach ($items as $oneItem)
         {
-            $discount = $this->discountFactory->getDiscount($product);
+//            $discount = $this->discountFactory->getDiscount($product);
+//
+//            $discountPrice    = $discount->getDiscountPrice($product);
+//            $discountQuantity = $discount->getDiscountQuantity($product);
+//
+//            $currentPrice = $discountPrice * $discountQuantity;
 
-            $discountPrice    = $discount->getDiscountPrice($product);
-            $discountQuantity = $discount->getDiscountQuantity($product);
-
-            $currentPrice = $discountPrice * $discountQuantity;
-            $this->totalPrice += $currentPrice;
+            $this->totalPrice += $oneItem->getPrice();
         }
     }
 

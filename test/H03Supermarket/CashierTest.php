@@ -1,18 +1,8 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: zoltan.budai
- * Date: 2014.09.30.
- * Time: 1:18
- */
+
 use Kata\H03Supermarket\Cashier;
-use Kata\H03Supermarket\Basket;
+use Kata\H03Supermarket\Concrete\CartItem;
 use Kata\H03Supermarket\Product\ProductFactory;
-use Kata\H03Supermarket\Product\Apple;
-use Kata\H03Supermarket\Product\Light;
-use Kata\H03Supermarket\Product\Starship;
-use Kata\H03Supermarket\Offer;
-use Kata\H03Supermarket\DiscountFactory;
 
 class CashierTest extends PHPUnit_Framework_TestCase
 {
@@ -21,67 +11,42 @@ class CashierTest extends PHPUnit_Framework_TestCase
      */
     private $cashier;
 
+    /**
+     * @var ProductFactory
+     */
+    private $factory;
+
     public function setUp()
     {
-        $this->cashier = new Cashier(new DiscountFactory());
+        $this->cashier = new Cashier();
+        $this->factory = new ProductFactory();
     }
 
-    public function testGetProductsCalledOnBasket()
+    public function testGetItemsCalledOnCartBeforeGetTotalPrice()
     {
-        $basketMock = $this->getMock('Kata\H03Supermarket\Basket', array('getProducts', 'getQuantity'));
+        $cartMock = $this->getMock('Kata\H03Supermarket\Cart', array('getItems'));
 
-        $productsArray = array(
-            new Apple(11, 3),
-            new Light(19, 1),
-            new Starship(13, 2),
+        $apple = $this->factory->getProduct('Apple');
+        $light = $this->factory->getProduct('Light');
+        $ship  = $this->factory->getProduct('Starship');
+
+        $cartItemsArray = array(
+            new CartItem($apple, 3),
+            new CartItem($light, 2),
+            new CartItem($ship,  1),
         );
 
-        $basketMock->expects($this->once())
-            ->method('getProducts')
-            ->willReturn($productsArray)
-        ;
+        $cartMock->expects($this->once())
+            ->method('getItems')
+            ->willReturn($cartItemsArray);
 
-        $this->cashier->processNextBasket($basketMock);
+        $this->cashier->processNextCart($cartMock);
+
+        $expectedPrice =
+              3 * $apple->getPrice()
+            + 2 * $light->getPrice()
+            + 1 * $ship->getPrice();
+
+        $this->assertEquals($expectedPrice, $this->cashier->getTotalPrice());
     }
-
-    /**
-     * @dataProvider dataForTotalCounts
-     */
-    public function testGetTotalOfSameProducts($expectedPrice, $product)
-    {
-        $basket = new Basket();
-        $basket->addProduct($product);
-
-        $this->cashier->processNextBasket($basket);
-        $total = $this->cashier->getTotalPrice();
-
-        $this->assertEquals($expectedPrice, $total);
-    }
-
-
-
-
-    public function dataForTotalCounts()
-    {
-        return array(
-            array(33, new Apple(11, 3)),
-            array(32, new Apple(32, 1)),
-            array(18, new Light(9, 2)),
-            array(19, new Light(19, 1)),
-            array(26, new Starship(13, 2)),
-            array(2999.97, new Starship(999.99, 3)),
-        );
-    }
-
-//    public function dataForTotalCountsWithOffer()
-//    {
-//        return array(
-//            array(33, new Apple(11, 5)),
-//            array(32, new Apple(32, 1)),
-//            array(18, new Light(9, 2)),
-//            array(19, new Light(19, 1)),
-//            array(26, new Starship(13, 2)),
-//            array(2999.97, new Starship(999.99, 3)),
-//        );
-//    }
 }
