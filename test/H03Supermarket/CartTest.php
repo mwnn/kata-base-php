@@ -1,6 +1,6 @@
 <?php
 
-use Kata\H03Supermarket\Product\ProductFactory;
+use Kata\H03Supermarket\ProductFactory;
 use Kata\H03Supermarket\Concrete\CartItem;
 use Kata\H03Supermarket\Cart;
 
@@ -52,7 +52,7 @@ class CartTest extends PHPUnit_Framework_TestCase
      *
      * @depends testAddProduct
      */
-    public function testGetItemPrice($appleItems)
+    public function testGetItemNormalPrice($appleItems)
     {
         $apple = $this->productFactory->getProduct('Apple');
         $oneApplePrice = $apple->getPrice();

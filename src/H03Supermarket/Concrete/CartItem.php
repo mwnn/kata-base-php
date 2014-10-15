@@ -11,6 +11,7 @@ implements Item
      * @var CartProduct
      */
     private $product;
+    private $oneItemPrice;
     private $quantity;
 
     /**
@@ -21,11 +22,22 @@ implements Item
     {
         $this->product  = $product;
         $this->setQuantity($quantity);
+        $this->setPrice($product->getPrice());
+    }
+
+    public function setPrice($price)
+    {
+        $this->oneItemPrice = $price;
     }
 
     public function getPrice()
     {
-        return $this->quantity * $this->product->getPrice();
+        return $this->oneItemPrice * $this->quantity;
+    }
+
+    public function getProductPrice()
+    {
+        return $this->oneItemPrice;
     }
 
     public function getName()

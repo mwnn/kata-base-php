@@ -1,6 +1,6 @@
 <?php
 
-use Kata\H03Supermarket\Product\ProductFactory;
+use Kata\H03Supermarket\ProductFactory;
 
 class ProductFactoryTest extends PHPUnit_Framework_TestCase
 {
@@ -17,15 +17,15 @@ class ProductFactoryTest extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider dataForFactoryTest
      */
-    public function testFactory($productClass)
+    public function testFactory($productName)
     {
         /**
          * @var CartProduct
          */
-        $product = $this->factory->getProduct($productClass);
+        $product = $this->factory->getProduct($productName);
 
         $this->assertInstanceOf("Kata\\H03Supermarket\\Concrete\\CartProduct", $product);
-        $this->assertEquals($productClass, $product->getName());
+        $this->assertEquals($productName, $product->getName());
     }
 
     public function dataForFactoryTest()

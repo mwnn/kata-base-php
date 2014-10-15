@@ -7,5 +7,3 @@ interface Product
     public function getName();
     public function getUnit();
 }
-
-

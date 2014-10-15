@@ -1,6 +1,6 @@
 <?php
 
-namespace Kata\H03Supermarket\Product;
+namespace Kata\H03Supermarket;
 
 use Kata\H03Supermarket\Concrete\CartProduct;
 

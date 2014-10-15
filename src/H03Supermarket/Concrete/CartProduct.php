@@ -34,3 +34,4 @@ implements Product, Price
         return $this->price;
     }
 }
+

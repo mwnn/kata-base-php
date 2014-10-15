@@ -32,18 +32,20 @@ namespace Kata\H03Supermarket;
 
 //use Kata\H03Supermarket\DiscountFactory;
 
+use Kata\H03Supermarket\Concrete\DiscountList;
+
 class Cashier
 {
     private $totalPrice = 0;
 
-//    /**
-//     * @var DiscountFactory
-//     */
-//    private $discountFactory;
+    /**
+     * @var DiscountList
+     */
+    private $discountList;
 
-    public function __construct(/*$discountfactory*/)
+    public function __construct(DiscountList $discountList)
     {
-//        $this->discountFactory = $discountFactory;
+        $this->discountList = $discountList;
     }
 
     public function processNextCart(Cart $cart)
@@ -53,19 +55,13 @@ class Cashier
 
         foreach ($items as $oneItem)
         {
-//            $discount = $this->discountFactory->getDiscount($product);
-//
-//            $discountPrice    = $discount->getDiscountPrice($product);
-//            $discountQuantity = $discount->getDiscountQuantity($product);
-//
-//            $currentPrice = $discountPrice * $discountQuantity;
-
-            $this->totalPrice += $oneItem->getPrice();
+            $discountedItem = $this->discountList->createDiscountedItem($oneItem);
+            $this->totalPrice += $discountedItem->getPrice();
         }
     }
 
     public function getTotalPrice()
     {
-        return $this->totalPrice;
+        return number_format($this->totalPrice, 2);
     }
 }

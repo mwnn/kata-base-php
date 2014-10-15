@@ -1,6 +1,6 @@
 <?php
 
-use Kata\H03Supermarket\Product\ProductFactory;
+use Kata\H03Supermarket\ProductFactory;
 use Kata\H03Supermarket\Concrete\CartItem;
 
 class ItemTest extends PHPUnit_Framework_TestCase
@@ -15,22 +15,64 @@ class ItemTest extends PHPUnit_Framework_TestCase
         $this->factory = new ProductFactory();
     }
 
-    public function testCreateItem()
+    /**
+     * @dataProvider dataForCreate
+     */
+    public function testCreateItem($productName, $quantity)
     {
-        $apple = $this->factory->getProduct('Apple');
-        $light = $this->factory->getProduct('Light');
-        $ship  = $this->factory->getProduct('Starship');
+        $product = $this->factory->getProduct($productName);
+        $item    = new CartItem($product, $quantity);
 
-        $appleItem = new CartItem($apple, 3);
-        $lightItem = new CartItem($light, 2);
-        $shipItem  = new CartItem($ship, 13);
+        $this->assertEquals($productName, $item->getName());
+        $this->assertEquals($quantity, $item->getQuantity());
+    }
 
-        $this->assertEquals('Apple', $appleItem->getName());
-        $this->assertEquals('Light', $lightItem->getName());
-        $this->assertEquals('Starship', $shipItem->getName());
+    /**
+     * @dataProvider dataForCreate
+     */
+    public function testSetPrice($productName, $quantity)
+    {
+        $product = $this->factory->getProduct($productName);
 
-        $this->assertEquals(3, $appleItem->getQuantity());
-        $this->assertEquals(2, $lightItem->getQuantity());
-        $this->assertEquals(13, $shipItem->getQuantity());
+        $item = new CartItem($product, $quantity);
+        $this->assertEquals($quantity * $product->getPrice(), $item->getPrice());
+
+        $item->setPrice(7);
+        $this->assertEquals(7 * $quantity, $item->getPrice());
+    }
+
+    /**
+     * @dataProvider dataForCreate
+     */
+    public function testSetQuantity($productName, $quantity)
+    {
+        $product = $this->factory->getProduct($productName);
+
+        $item = new CartItem($product, $quantity);
+        $this->assertEquals($quantity, $item->getQuantity());
+
+        $item->setQuantity(12+$quantity);
+        $this->assertEquals(12+$quantity, $item->getQuantity());
+    }
+
+    /**
+     * @dataProvider dataForCreate
+     */
+    public function testGetUnit($productName, $quantity, $unit)
+    {
+        $product = $this->factory->getProduct($productName);
+
+        $item = new CartItem($product, $quantity);
+
+        $this->assertEquals($unit, $item->getUnit());
+    }
+
+    public function dataForCreate()
+    {
+        return array(
+            array('Apple', 3, 'kg'),
+            array('Light', 2, 'year'),
+            array('Starship', 12, 'piece'),
+        );
     }
 }
