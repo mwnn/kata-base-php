@@ -22,10 +22,49 @@ class Calculator
      */
     public function add($numbers)
     {
-        if (false === is_string($numbers))
-        {
+        $sum = 0;
+
+        if (false === is_string($numbers)) {
             throw new CalculatorException("Invalid data type has been given.");
         }
 
+        $numbers = trim($numbers);
+
+        if ('' !== $numbers)
+        {
+            if (1 === preg_match("/[^0-9\,]+/", $numbers, $m))
+            {
+                throw new CalculatorException("Invalid data value has been given.");
+            }
+
+            $numArray = $this->getNumbersFromString($numbers);
+
+            if (1 === count($numArray))
+            {
+                $sum = $numArray[0];
+            }
+        }
+
+        return $sum;
+    }
+
+    /**
+     * Convert the comma separated list of numbers to an integer array.
+     *
+     * @param String $commaSeparatedNumbersAsString   The comma separated list of numbers as string.
+     *
+     * @return int[]
+     */
+    private function getNumbersFromString($commaSeparatedNumbersAsString)
+    {
+        $intNumArray = array();
+        $strNumParts = explode(',', $commaSeparatedNumbersAsString);
+
+        foreach ($strNumParts as $strNum)
+        {
+            $intNumArray[] = ('' === $strNum) ? 0 : (int)$strNum;
+        }
+
+        return $intNumArray;
     }
 }
