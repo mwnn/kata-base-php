@@ -91,6 +91,17 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($singleValue, $sum);
     }
 
+    /**
+     * @dataProvider dataForTestAddOfMultipleNumbers
+     */
+    public function testAddOfMultipleNumbers($expectedSum, $multipleNumber)
+    {
+        $sum = $this->calculator->add($multipleNumber);
+
+        $this->assertEquals($expectedSum, $sum);
+    }
+
+
 
 //   ****************************************
 //                    DATA PROVIDERS
@@ -141,6 +152,22 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
             array('1'),
             array('12'),
             array('123'),
+        );
+    }
+
+    /**
+     * Provides data for the testAddOfMultipleNumbers method.
+     *
+     * @return array
+     */
+    public function dataForTestAddOfMultipleNumbers()
+    {
+        return array(
+            array(0, ','),
+            array(0, '0,0'),
+            array(7, '3,4'),
+            array(7, '3,,4'),
+            array(6, '1,2,3'),
         );
     }
 

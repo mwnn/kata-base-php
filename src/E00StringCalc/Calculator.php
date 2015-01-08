@@ -43,6 +43,13 @@ class Calculator
             {
                 $sum = $numArray[0];
             }
+            else
+            {
+                foreach ($numArray as $num)
+                {
+                    $sum += $num;
+                }
+            }
         }
 
         return $sum;
