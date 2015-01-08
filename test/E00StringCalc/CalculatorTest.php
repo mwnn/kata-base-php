@@ -101,6 +101,17 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedSum, $sum);
     }
 
+    /**
+     * @dataProvider dataForTestAddAcceptNewlinesBetweenNumbers
+     */
+    public function testAddAcceptNewlinesBetweenNumbers($expectedSum, $multipleNumber)
+    {
+        // Note: I know, I know It's duplication... but I've created a
+        // separate test and data provider this time for easier checking.
+
+        $sum = $this->calculator->add($multipleNumber);
+        $this->assertEquals($expectedSum, $sum);
+    }
 
 
 //   ****************************************
@@ -168,6 +179,20 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
             array(7, '3,4'),
             array(7, '3,,4'),
             array(6, '1,2,3'),
+        );
+    }
+
+    /**
+     * Provides data for the testAddOfMultipleNumbers method.
+     *
+     * @return array
+     */
+    public function dataForTestAddAcceptNewlinesBetweenNumbers()
+    {
+        return array(
+            array(3, "1\n2"),
+            array(6, "1\n2\n3"),
+            array(6, "1,2\n3"),
         );
     }
 

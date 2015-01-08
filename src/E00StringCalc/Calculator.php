@@ -32,7 +32,7 @@ class Calculator
 
         if ('' !== $numbers)
         {
-            if (1 === preg_match("/[^0-9\,]+/", $numbers, $m))
+            if (1 === preg_match("/[^0-9\,\\n]+/", $numbers, $m))
             {
                 throw new CalculatorException("Invalid data value has been given.");
             }
@@ -65,6 +65,8 @@ class Calculator
     private function getNumbersFromString($commaSeparatedNumbersAsString)
     {
         $intNumArray = array();
+
+        $commaSeparatedNumbersAsString = str_replace("\n", ',', $commaSeparatedNumbersAsString);
         $strNumParts = explode(',', $commaSeparatedNumbersAsString);
 
         foreach ($strNumParts as $strNum)
